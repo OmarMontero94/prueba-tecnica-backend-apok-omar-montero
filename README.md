@@ -14,7 +14,7 @@ Here is the link to the repo [Prueba Practica Backend](https://gitlab.com/grupoa
 - [laravel 10](https://laravel.com/).
 
 ## Step by Step.
-Once you had cloned the project in a console go to the root folder of the project and type
+Once you had cloned the project in a console go to the root folder of the project and run the command:
 
     composer install
 
