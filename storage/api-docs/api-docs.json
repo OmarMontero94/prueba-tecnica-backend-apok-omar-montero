@@ -1,0 +1,303 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Api documentation for -Prueba Practica Backend Apok- by Omar Montero",
+        "description": "Documentacion de la pruba tecnica pra el puesto de backend en apok, Hecho por Omar Montero",
+        "version": "1.0"
+    },
+    "paths": {
+        "/api/node": {
+            "post": {
+                "tags": [
+                    "Nodes"
+                ],
+                "summary": "Post a new node",
+                "operationId": "b5d75fffe5f7119dc255a08a17b7aa27",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "parents": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "number",
+                                            "example": "1"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Node(s) created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "number",
+                                                    "example": "2"
+                                                },
+                                                "parent": {
+                                                    "type": "number",
+                                                    "example": "1"
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "two"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "example": "2024-05-10 11:33:25"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "example": "2024-05-10 11:33:25"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Node(s) created successfully"
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": "200"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/node/parents": {
+            "get": {
+                "tags": [
+                    "Nodes"
+                ],
+                "summary": "Get all parent nodes",
+                "operationId": "27da1d910647850d0515872f5cc4fa5f",
+                "responses": {
+                    "200": {
+                        "description": "Node(s) returned successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "number",
+                                                        "example": "2"
+                                                    },
+                                                    "parent": {
+                                                        "type": "number",
+                                                        "example": "1"
+                                                    },
+                                                    "title": {
+                                                        "type": "string",
+                                                        "example": "two"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "example": "2024-05-10 11:33:25"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "example": "2024-05-10 11:33:25"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Node(s) returned successfully"
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": "200"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/node/child/{parent}": {
+            "get": {
+                "tags": [
+                    "Nodes"
+                ],
+                "summary": "Get child nodes of a parent",
+                "operationId": "18aa24d65d9573aff714316d4b845222",
+                "parameters": [
+                    {
+                        "name": "parent",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "number"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "level": {
+                                        "type": "number",
+                                        "example": "1"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Node(s) returned successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "number",
+                                                        "example": "1"
+                                                    },
+                                                    "parent": {
+                                                        "type": "number",
+                                                        "example": "null"
+                                                    },
+                                                    "title": {
+                                                        "type": "string",
+                                                        "example": "two"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "example": "2024-05-10 11:33:25"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "example": "2024-05-10 11:33:25"
+                                                    },
+                                                    "childrens": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "id": {
+                                                                    "type": "number",
+                                                                    "example": "2"
+                                                                },
+                                                                "parent": {
+                                                                    "type": "number",
+                                                                    "example": "1"
+                                                                },
+                                                                "title": {
+                                                                    "type": "string",
+                                                                    "example": "two"
+                                                                },
+                                                                "created_at": {
+                                                                    "type": "string",
+                                                                    "example": "2024-05-10 11:33:25"
+                                                                },
+                                                                "updated_at": {
+                                                                    "type": "string",
+                                                                    "example": "2024-05-10 11:33:25"
+                                                                },
+                                                                "childrens": {
+                                                                    "type": "array",
+                                                                    "items": {}
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Node(s) created successfully"
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": "200"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/node/{id}": {
+            "delete": {
+                "tags": [
+                    "Nodes"
+                ],
+                "summary": "Delete an specific node",
+                "operationId": "0893ae59437907481e00e4dbcf12cee1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "number"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Node deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Node(s) Node deleted successfully"
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": "200"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

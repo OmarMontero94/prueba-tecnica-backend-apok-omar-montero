@@ -16,10 +16,83 @@ use App\Http\Resources\NodeChildResource;
 
 use App\Traits\FormaterTrait;
 
+
+/**
+* @OA\Info(
+*           title="Api documentation for -Prueba Practica Backend Apok- by Omar Montero", 
+*           version="1.0",
+*           description="Documentacion de la pruba tecnica pra el puesto de backend en apok, Hecho por Omar Montero"
+* )
+*/
+
 class NodeController extends Controller
 {
     use FormaterTrait;
 
+    /**
+     * @OA\Post(
+     *     path="/api/node",
+     *     summary="Post a new node",
+     *     tags={"Nodes"},
+     *     @OA\RequestBody(
+     *          @OA\JsonContent(
+     *               @OA\Property(
+     *                  property="parents",
+     *                  type="array",
+     *                  @OA\Items(
+     *                      type="number",
+     *                      example = "1"
+     *                  )
+     *               )
+     *          )
+     *     ),
+     *     @OA\Response(
+     *          response=200,
+     *          description="Node(s) created successfully",
+     *          @OA\JsonContent(
+     *              @OA\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @OA\Property(
+     *                         property="id",
+     *                         type="number",
+     *                         example="2"
+     *                  ),
+     *                  @OA\Property(
+     *                         property="parent",
+     *                         type="number",
+     *                         example="1"
+     *                  ),
+     *                  @OA\Property(
+     *                         property="title",
+     *                         type="string",
+     *                         example="two"
+     *                  ),
+     *                  @OA\Property(
+     *                         property="created_at",
+     *                         type="string",
+     *                         example="2024-05-10 11:33:25"
+     *                  ),
+     *                  @OA\Property(
+     *                         property="updated_at",
+     *                         type="string",
+     *                         example="2024-05-10 11:33:25"
+     *                  ),
+     *              ),
+     *              @OA\Property(
+     *                  property="message",
+     *                  type="string",
+     *                  example = "Node(s) created successfully"
+     *              ),
+     *              @OA\Property(
+     *                  property="code",
+     *                  type="number",
+     *                  example = "200"
+     *              ),   
+     *          )
+     *      )
+     * )
+     */
     public function create(Request $request){
         try {
             $validator = Validator::make($request->all(), [
@@ -62,6 +135,63 @@ class NodeController extends Controller
         
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/node/parents",
+     *     summary="Get all parent nodes",
+     *     tags={"Nodes"},
+     *     
+     *     @OA\Response(
+     *          response=200,
+     *          description="Node(s) returned successfully",
+     *          @OA\JsonContent(
+     *              @OA\Property(
+     *                  property="data",
+     *                  type="array",
+     *                  @OA\Items(
+     *                      type="object",
+     *                      @OA\Property(
+     *                          property="id",
+     *                          type="number",
+     *                          example="2"
+     *                      ),
+     *                      @OA\Property(
+     *                          property="parent",
+     *                           type="number",
+     *                          example="1"
+     *                      ),
+     *                      @OA\Property(
+     *                          property="title",
+     *                          type="string",
+     *                          example="two"
+     *                       ),
+     *                      @OA\Property(
+     *                          property="created_at",
+     *                          type="string",
+     *                          example="2024-05-10 11:33:25"
+     *                      ),
+     *                      @OA\Property(
+     *                          property="updated_at",
+     *                          type="string",
+     *                          example="2024-05-10 11:33:25"
+     *                      ),
+     *                  )
+     *                  
+     *              ),
+     *              @OA\Property(
+     *                  property="message",
+     *                  type="string",
+     *                  example = "Node(s) returned successfully"
+     *              ),
+     *              @OA\Property(
+     *                  property="code",
+     *                  type="number",
+     *                  example = "200"
+     *              ),   
+     *          )
+     *      )
+     * )
+     */
     public function indexParents(Request $request){
         try {
             $lang = $request->header("language");
@@ -76,7 +206,117 @@ class NodeController extends Controller
         
     }
 
-    public function indexChildByParent($parent, Request $request){
+    /**
+     * @OA\Get(
+     *     path="/api/node/child/{parent}",
+     *     summary="Get child nodes of a parent",
+     *     tags={"Nodes"},
+     *     @OA\Parameter(
+     *         in="path",
+     *         name="parent",
+     *         required=true,
+     *         @OA\Schema(type="number")
+     *     ),
+     *     @OA\RequestBody(
+     *          @OA\JsonContent(
+     *               @OA\Property(
+     *                  property="level",
+     *                  type="number",
+     *                  example = "1"
+     *               )
+     *          )
+     *     ),
+     *     
+     *     @OA\Response(
+     *          response=200,
+     *          description="Node(s) returned successfully",
+     *          @OA\JsonContent(
+     *              @OA\Property(
+     *                  property="data",
+     *                  type="array",
+     *                  @OA\Items(
+     *                      type="object",
+     *                      @OA\Property(
+     *                          property="id",
+     *                          type="number",
+     *                          example="1"
+     *                      ),
+     *                      @OA\Property(
+     *                          property="parent",
+     *                           type="number",
+     *                          example="null"
+     *                      ),
+     *                      @OA\Property(
+     *                          property="title",
+     *                          type="string",
+     *                          example="two"
+     *                       ),
+     *                      @OA\Property(
+     *                          property="created_at",
+     *                          type="string",
+     *                          example="2024-05-10 11:33:25"
+     *                      ),
+     *                      @OA\Property(
+     *                          property="updated_at",
+     *                          type="string",
+     *                          example="2024-05-10 11:33:25"
+     *                      ),
+     *                      @OA\Property(
+     *                          property="childrens",
+     *                          type="array",
+     *                          @OA\Items(
+     *                              type="object",
+     *                              @OA\Property(
+     *                                  property="id",
+     *                                  type="number",
+     *                                  example="2"
+     *                              ),
+     *                              @OA\Property(
+     *                                  property="parent",
+     *                                  type="number",
+     *                                  example="1"
+     *                              ),
+     *                              @OA\Property(
+     *                                  property="title",
+     *                                  type="string",
+     *                                  example="two"
+     *                              ),
+     *                              @OA\Property(
+     *                                  property="created_at",
+     *                                  type="string",
+     *                                  example="2024-05-10 11:33:25"
+     *                              ),
+     *                              @OA\Property(
+     *                                  property="updated_at",
+     *                                  type="string",
+     *                                  example="2024-05-10 11:33:25"
+     *                              ),
+     *                              @OA\Property(
+     *                                  property="childrens",
+     *                                  type="array",
+     *                                  @OA\Items()
+     *                              ),
+     *                          )
+     *                      ),
+     *                  )
+     *                  
+     *              ),
+     *              @OA\Property(
+     *                  property="message",
+     *                  type="string",
+     *                  example = "Node(s) created successfully"
+     *              ),
+     *              @OA\Property(
+     *                  property="code",
+     *                  type="number",
+     *                  example = "200"
+     *              ),   
+     *          )
+     *      )
+     * )
+     */
+    
+     public function indexChildByParent($parent, Request $request){
         try {
 
             $validator = Validator::make($request->all(), [
@@ -114,6 +354,40 @@ class NodeController extends Controller
         
     }
 
+    /**
+     * @OA\Delete(
+     *     path="/api/node/{id}",
+     *     summary="Delete an specific node",
+     *     tags={"Nodes"},
+     *     @OA\Parameter(
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(type="number")
+     *     ),
+     *     
+     *     @OA\Response(
+     *          response=200,
+     *          description="Node deleted successfully",
+     *          @OA\JsonContent(
+     *              @OA\Property(
+     *                  property="data",
+     *                  type="object",
+     *              ),
+     *              @OA\Property(
+     *                  property="message",
+     *                  type="string",
+     *                  example = "Node(s) Node deleted successfully"
+     *              ),
+     *              @OA\Property(
+     *                  property="code",
+     *                  type="number",
+     *                  example = "200"
+     *              ),   
+     *          )
+     *      )
+     * )
+     */
     public function delete($id){
         try {
             $node = Node::find($id);

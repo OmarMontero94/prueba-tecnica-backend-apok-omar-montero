@@ -22,7 +22,7 @@ class NodeTest extends TestCase
         $payload = [
             //'parents' => [1,2,3]
         ];
-        $response = $this->json('post', 'api/node', $payload)
+        $response = $this->json('post', 'api/node', $payload, ["language"=> null, "timezone"=>null])
              ->assertStatus(Response::HTTP_OK)
              ->assertJsonStructure(
                  [
@@ -36,9 +36,12 @@ class NodeTest extends TestCase
                      "message",
                      "code"
                  ]
-             );
-             
-        $this->assertDatabaseHas("nodes", $response->getOriginalContent()["data"]->toArray($response));
+                    );
+
+                    //dd($response->getOriginalContent()["data"]->toArray($response));
+                    //dd(json_decode($response->getContent())->data);
+                    //$data = new \stdClass;
+        $this->assertDatabaseHas("nodes", json_decode($response->getContent(),true)["data"]);
     }
 
     public function test_index_parent(): void
@@ -75,14 +78,14 @@ class NodeTest extends TestCase
             ]);
     }
 
-    public function test_index_children_by_parent_direct(): void
-    {
-        $this->assertTrue(true);
-    }
-
     public function test_delete(): void
-    {
-        $this->assertTrue(true);
+    {   
+        //use deletable node id in order to past the test. 
+        $id = 108;
+        $response = $this->json('delete', 'api/node/'.$id)
+        ->assertStatus(Response::HTTP_OK);
+        $this->assertDatabaseMissing("nodes", ["id"=>$id]);
+    
     }
     
 }
