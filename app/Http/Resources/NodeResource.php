@@ -2,8 +2,6 @@
 
 namespace App\Http\Resources;
 
-use NumberFormatter;
-
 use Illuminate\Http\Resources\Json\JsonResource;
 
 
@@ -18,14 +16,14 @@ class NodeResource extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
-    public function toArray($request)
+    public function toArray($request) : array
     {
         return [
             'id' => $this->id,
             'parent' => $this->parent,
-            'title' => $this->titleTranslation($this->id, $this->language),
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at
+            'title' => $this->titleTranslation($this->id, $request->header("language")),
+            'created_at' =>$this->timemezoneShift($this->created_at,$request->header("timezone")),
+            'updated_at' => $this->timemezoneShift($this->updated_at,$request->header("timezone"))
         ];    
     }
 

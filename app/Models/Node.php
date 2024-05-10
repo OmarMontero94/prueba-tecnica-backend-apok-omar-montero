@@ -10,25 +10,24 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Node extends Model
 {
     use HasFactory;
-
-    public $level = 1;
-
+   
     protected $attributes = [
-        'level'
+        'parent' => null,
+        'title' =>null,
+        // 'language' => "en",
+        // 'timezone' => "America/Caracas"
+
     ];
+
     protected $fillable = [
         'parent',
         'title'
     ];
     
     protected $guarded = [
-            'id',
-            'parent'
+            'id'
     ];
 
-    // protected $appends = [
-    //     'level'
-    // ];
     
     public function parent()
     {
@@ -51,7 +50,7 @@ class Node extends Model
         return $result;
     }
 
-    public function children()
+    public function childrens()
     {
         return $this->hasMany(Node::class, 'parent');
     }
@@ -63,7 +62,7 @@ class Node extends Model
             return false;
         }else{
             $this->level--; 
-            return $this->children()->with("childrenRecursive");
+            return $this->childrens()->with("childrenRecursive");
         }
         
         
@@ -80,8 +79,4 @@ class Node extends Model
         return $result;
     }
 
-    // public function getLevelAttribute()
-    // {
-    //     return 0;
-    // }
 }

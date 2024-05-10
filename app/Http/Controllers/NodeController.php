@@ -12,6 +12,7 @@ use App\Models\Node;
 use Illuminate\Http\Request;
 
 use App\Http\Resources\NodeResource;
+use App\Http\Resources\NodeChildResource;
 
 use App\Traits\FormaterTrait;
 
@@ -21,45 +22,42 @@ class NodeController extends Controller
 
     public function create(Request $request){
         try {
-            $lang = $request->header("language");
             $validator = Validator::make($request->all(), [
-                'parents'=> 'nullable|array',
-                'parents.*'=> 'exists:App\Models\Node,id',
+                'parents.*'=> 'nullable|array|exists:App\Models\Node,id',
+                'parents.*'=> '',
             ]);
 
             if ($validator->fails()) {
                 return $this->sendError('Validation errors', $validator->errors()->getMessages(), 500);
             }
 
-            if(!$request->all()){
-                $node = Node::create([]);
+            if(!$request->all()){  
+
+                $node =  Node::create([]);
+                $node->save(); 
                 $node->title = $this->titleTranslation($node->id);
                 $node->save();
-                $node->language = $lang;
-                $node->timeZone = null;
+                $node->timeZone = $request->header("timezone");
+                $node->language = $request->header("language");
 
                 return $this->sendResponse( new NodeResource($node), 'Node(s) created successfully', 200);
 
+            }else{
+
+                foreach ($request->parents as $parent) {
+                    $node =  Node::create(["parent" => $parent]);
+                    $node->title = $this->titleTranslation($node->id);
+                    $node->save();
+                    $node->language = $request->header("timezone");
+                    $node->timeZone = $request->header("languagee");
+                    $nodes[] = $node;
+                }
+
+                return $this->sendResponse(NodeResource::collection($nodes), 'Node(s) created successfully', 200);
             }
-
-            $nodes = [];
-
-            foreach ($request->parents as $parent) {
-                $node = Node::create(["parent" => $parent]);
-                $node->title = $this->titleTranslationdDefault($node->id);
-                $node->save();
-                $node->language = $lang;
-                $node->timeZone = null;
-                $nodes[] = $node;
-            }
-
-            // $nodes["language"] = $lang;
-            // $nodes["timeZone"] = null;
-
-            return $this->sendResponse(NodeResource::collection($nodes), 'Node(s) created successfully', 200);
 
         } catch (\Exception $e) {
-            return $this->sendError("error", $e);
+            return $this->sendError("error", $e->getMessage());
         }
         
     }
@@ -68,13 +66,7 @@ class NodeController extends Controller
         try {
             $lang = $request->header("language");
 
-            $parentNodes = Node::has('children')->get();
-
-            $parentNodes->map( function ($node) use($lang){
-                $node->language = $lang;
-                $node->timeZone = null;
-                return $node;
-            });
+            $parentNodes = Node::has('childrens')->get();
 
             return $this->sendResponse(NodeResource::collection($parentNodes), 'Node(s) returned successfully', 200);
 
@@ -88,19 +80,16 @@ class NodeController extends Controller
         try {
 
             $validator = Validator::make($request->all(), [
-                 'level'=> 'nullable|integer|gte:0',
+                 'level'=> 'nullable|integer|gt:0',
              ]);
-
-            
 
             if ($validator->fails()) {
                 
                 return $this->sendError('Validation errors', $validator->errors()->getMessages(), 500);
             }
-
-            $stringLevel = $request->level == 0 ? "children" : "children".str_repeat('.children',$request->level);
-            
+                                  
             $lang = $request->header("language");
+            $timezone = $request->header("timezone");
 
             $parentNode = Node::find($parent);
             
@@ -108,16 +97,16 @@ class NodeController extends Controller
                 return $this->sendError('Node not found','', 400);
             }
 
-            if($request->level == 0){
+            if(!$request->all()){
                 $child = $parentNode->where("parent",$parentNode->id)->get();
+                //$childrens =$this->mapRecursive($child, $lang, $timezone);
+                return $this->sendResponse(NodeResource::collection($child), 'Node(s) returned successfully', 200);
             }else{
-                $child = $parentNode->where("parent",$parentNode->id)->with($stringLevel)->get();
+                $stringLevel = $request->level == 1 ? "childrens" : "childrens".str_repeat('.childrens',$request->level - 1);
+                $child = Node::where("parent",$parentNode->id)->with($stringLevel)->get()->toArray();
+                return $this->sendResponse(NodeChildResource::collection($child), 'Node(s) returned successfully', 200);
             }
             
-            $childrens =$this->mapRecursive($child, $lang);
-            
-
-              return $this->sendResponse(NodeResource::collection($childrens), 'Node(s) returned successfully', 200);
 
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), $e);
@@ -148,14 +137,62 @@ class NodeController extends Controller
         }
         
     }
-    public function mapRecursive($array, $lang) {
+    public function mapRecursive($array, $lang, $timezone) {
+        
+        foreach ($array as $key => $item) {
+            
+            $array[$key]["language"] = $lang;
+            $array[$key]["timezone"] = $timezone;
+            $children = $item["children"];
+            //dd($array[$key]["children"]);
+            $array[$key]["children"] = $this->mapRecursive($children, $lang, $timezone);
+            //$item->put("children", $this->mapRecursive($children, $lang, $timezone));
+        } 
+        return $array;
+    }
+
+    public function mapRecursiveResource($array) {
         $result = [];
         foreach ($array as $item) {
-            $item["language"]= $lang ;
-            //dd($item);
-            $result[] = $item;
-            $result = array_merge($result, $this->mapRecursive($item['children'], $lang));
+            $result[] = new NodeResource($item);
+            $result = array_merge($result, $this->mapRecursiveResource($item['children']));
         }
         return $result;
     }
+
+    // $childArray = $child->toArray();
+
+                // $childArrayResult = $this->mapRecursive($childArray, $lang, $timezone);
+
+                // dd($childArrayResult);
+
+                // $childCollection = new Collection($childArray);
+               
+
+                // //dd($childCollection);
+
+                // $childCollection->map($recursive = function($item) use (&$recursive, $lang, $timezone){
+
+                //     //dd($item);
+
+                //     if(!$item["children"]){
+                //         return $item;
+                //     }
+                //     $item["language"] = $lang;
+                //     $item["timezone"] = $timezone;
+                //     dd($item);
+                //     $item["children"] = $recursive($item["children"]);
+
+                //     return $item;
+                // });
+
+                // dd($childCollection);
+
+                // $childrens =$this->mapRecursive($childCollection, $lang, $timezone);
+                // dd($childrens);
+//dd($child);
+            //$childrens =$this->mapRecursive($child, $lang, $timezone);
+            
+            // dd($childrens);
+            
 }
