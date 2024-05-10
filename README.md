@@ -14,7 +14,7 @@ Here is the link to the repo [Prueba Practica Backend](https://gitlab.com/grupoa
 - [laravel 10](https://laravel.com/).
 
 ## Step by Step.
-Once you had cloned teh project in a console go to the root folder of the project and type
+Once you had cloned the project in a console go to the root folder of the project and type
 
     composer install
 
@@ -22,7 +22,7 @@ then use the **.env.example** and remove the ".example " from the name, and chek
 
 So far waht we need is to work with the Database condigurations more specifically the DB_DATABASE, why beacuse we need a virgin DB, you can support yourself with laragon/phpMyAdmin since laragon has everything, create a database with the same name as the **DB_DATABASE** env variable, and you should be ready to go, in case you want a different name for the DB you have to set the value of with that name **DB_DATABASE**.
 
-Once all of that is done, teh next step is to migrate the database just use this command:
+Once all of that is done, the next step is to migrate the database just use this command:
 
     php artisan migrate --path=database\migrations\2024_05_08_214306_create_nodes_table.php
     
@@ -58,7 +58,7 @@ and you should be ready to go see it.
 In order to test using the php unit testing you can use this command:
 
     "./vendor/bin/phpunit" tests/Unit/RoomTest.php
-In case you want to test using a postman collection, said collection shoulf be place in this directory on teh root folder of the project:
+In case you want to test using a postman collection, said collection shoulf be place in this directory on the root folder of the project:
 
     PostmanCollection\Prueba Tecnica Backend Apok.postman_collection.json
     
