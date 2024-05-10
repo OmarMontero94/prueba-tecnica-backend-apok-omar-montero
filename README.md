@@ -1,66 +1,79 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
 
-## About Laravel
+## Prueba Practica Backend Apok by Omar Montero
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+This is a project requested by the Apok group, the inital idea of this projects is from them
+Here is the link to the repo [Prueba Practica Backend](https://gitlab.com/grupoapok/dev-position-tests/backend/graph-api)
+. this is just an implementation of that test, so lets talk about what we need to run this project.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Requirements
+- [Laragon 6.0](https://laragon.org/).
+- [php ^8.1](https://www.php.net/downloads).
+- [Composer version ^2.5.8](https://getcomposer.org/).
+- [laravel 10](https://laravel.com/).
 
-## Learning Laravel
+## Step by Step.
+Once you had cloned the project in a console go to the root folder of the project and run the command:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+    composer install
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+then use the **.env.example** and remove the ".example " from the name, and chekc it out.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+So far waht we need is to work with the Database condigurations more specifically the DB_DATABASE, why beacuse we need a virgin DB, you can support yourself with laragon/phpMyAdmin since laragon has everything, create a database with the same name as the **DB_DATABASE** env variable, and you should be ready to go, in case you want a different name for the DB you have to set the value of with that name **DB_DATABASE**.
 
-## Laravel Sponsors
+Once all of that is done, the next step is to migrate the database just use this command:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+    php artisan migrate --path=database\migrations\2024_05_08_214306_create_nodes_table.php
+    
+After this we need to seed the DB with the next command:
 
-### Premium Partners
+    php artisan db:seed --class=NodeSeeder
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+And that should be it to run the project us the command:
 
-## Contributing
+    php artisan serve
+you should see something like this
+    
+    INFO  Server running on [http://127.0.0.1:8000].
+    
+    Press Ctrl+C to stop the server
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Now the app is ready to go.
 
-## Code of Conduct
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## API Documentation.
 
-## Security Vulnerabilities
+To access the api documentation the porject mus be running with:
+    
+    php artisan serve
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Go to the endpoint 
 
-## License
+    http://127.0.0.1:8000/api/documentation
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+and you should be ready to go see it.
+
+## Testing.
+In order to test using the php unit testing you can use this command:
+
+    "./vendor/bin/phpunit" tests/Unit/RoomTest.php
+In case you want to test using a postman collection, said collection shoulf be place in this directory on the root folder of the project:
+
+    PostmanCollection\Prueba Tecnica Backend Apok.postman_collection.json
+    
+## In Case of errors and weird behavior
+
+Kill the process and run this commands:
+
+    php artisan route:cache
+
+    php artisan cache:clear
+After this it should be more than enough just run:
+
+    php artisan serve
+
+And everything shoulf be back to normal.
+
+In case of any questions and consultions, hit me up at this email address omarjo94@gmail.com i should answer in a short time.
+    
