@@ -18,7 +18,6 @@ class NodeChildResource extends JsonResource
      */
     public function toArray($request) : array
     {
-        //dd($this);
         return [
             'id' => $this["id"],
             'parent' => $this["parent"],
