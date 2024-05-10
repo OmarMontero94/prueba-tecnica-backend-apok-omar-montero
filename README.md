@@ -2,7 +2,9 @@
 
 ## Prueba Practica Backend Apok by Omar Montero
 
-This is a project requested by the Apok group, the inital idea of this projects is from them. this is an implementation of that test, so lets talk about what we need to run this project.
+This is a project requested by the Apok group, the inital idea of this projects is from them
+Here is the link to the repo [Prueba Practica Backend](https://gitlab.com/grupoapok/dev-position-tests/backend/graph-api)
+. this is just an implementation of that test, so lets talk about what we need to run this project.
 
 
 ## Requirements
