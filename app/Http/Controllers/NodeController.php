@@ -93,6 +93,7 @@ class NodeController extends Controller
      */
     public function create(Request $request){
         try {
+
             $validator = Validator::make($request->all(), [
                 'parents.*'=> 'nullable|array|exists:App\Models\Node,id',
                 'parents.*'=> '',
@@ -188,16 +189,14 @@ class NodeController extends Controller
      */
     public function indexParents(Request $request){
         try {
+
             $lang = $request->header("language");
-
             $parentNodes = Node::has('childrens')->get();
-
             return $this->sendResponse(NodeResource::collection($parentNodes), 'Node(s) returned successfully', 200);
 
         } catch (\Exception $e) {
             return $this->sendError("error", $e);
         }
-        
     }
 
     /**
@@ -380,6 +379,7 @@ class NodeController extends Controller
      */
     public function delete($id){
         try {
+
             $node = Node::find($id);
 
             if(!$node){
@@ -389,8 +389,9 @@ class NodeController extends Controller
             $child = Node::where('parent',$id)->first();
 
             if($child){
-                return $this->sendError("This node is a parent, it cannot be deleted");    
+                return $this->sendError("This node is a parent, it cannot be deleted");
             }else{
+
                 $node->delete();
                 return $this->sendResponse([], 'Node deleted successfully', 200);
 
