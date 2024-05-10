@@ -58,7 +58,7 @@ and you should be ready to go see it.
 In order to test using the php unit testing you can use this command:
 
     "./vendor/bin/phpunit" tests/Unit/RoomTest.php
-In case you want to test using a postman collection, said collection shoulf be place in this directory on the root folder of the project:
+In case you want to test using a postman collection, said collection should be place in this directory on the root folder of the project:
 
     PostmanCollection\Prueba Tecnica Backend Apok.postman_collection.json
     
@@ -73,7 +73,7 @@ After this it should be more than enough just run:
 
     php artisan serve
 
-And everything shoulf be back to normal.
+And everything should be back to normal.
 
 In case of any questions and consultions, hit me up at this email address omarjo94@gmail.com i should answer in a short time.
     
