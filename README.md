@@ -52,7 +52,7 @@ Go to the endpoint
 
     http://127.0.0.1:8000/api/documentation
 
-and you should be ready to go, see it.
+and you should be ready to go.
 
 ## Testing.
 To test using the php unit testing you can use this command:
